@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stopwatch</title>
+  <style>
+    .container {
+      text-align: center;
+      margin-top: 100px;
+      background-color: #212529;
+      border-radius: 10px;
+      padding: 20px;
+    }
+    
+    #time {
+      font-size: 48px;
+      color: #fff;
+    }
+    
+    button {
+      font-size: 24px;
+      padding: 10px 20px;
+      margin-top: 20px;
+      background-color: #fff;
+      color: #212529;
+      border: none;
+      border-radius: 5px;
+    }
+    
+    button:hover {
+      background-color: #000;
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div id="time">00:00:00</div>
+    <button id="startStopButton">Start</button>
+    <button id="resetButton">Reset</button>
+  </div>
+
+  <script>
+    // Variables
+    var startTime;
+    var elapsedTime = 0;
+    var timerInterval;
+
+    // Format time in HH:MM:SS format
+    function formatTime(time) {
+      var hours = Math.floor(time / 3600000);
+      var minutes = Math.floor((time % 3600000) / 60000);
+      var seconds = Math.floor((time % 60000) / 1000);
+      return (
+        (hours < 10 ? "0" : "") +
+        hours +
+        ":" +
+        (minutes < 10 ? "0" : "") +
+        minutes +
+        ":" +
+        (seconds < 10 ? "0" : "") +
+        seconds
+      );
+    }
+
+    // Start or stop the stopwatch
+    function startStop() {
+      if (timerInterval) {
+        // Stop the stopwatch
+        clearInterval(timerInterval);
+        timerInterval = null;
+        document.getElementById("startStopButton").textContent = "Start";
+      } else {
+        // Start the stopwatch
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(updateTime, 10);
+        document.getElementById("startStopButton").textContent = "Stop";
+      }
+    }
+
+    // Update the stopwatch time
+    function updateTime() {
+      var currentTime = Date.now();
+      elapsedTime = currentTime - startTime;
+      document.getElementById("time").textContent = formatTime(elapsedTime);
+    }
+
+    // Reset the stopwatch
+    function reset() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      elapsedTime = 0;
+      document.getElementById("time").textContent = formatTime(elapsedTime);
+      document.getElementById("startStopButton").textContent = "Start";
+    }
+
+    // Event listeners
+    document.getElementById("startStopButton").addEventListener("click", startStop);
+    document.getElementById("resetButton").addEventListener("click", reset);
+  </script>
+</body>
+</html>
